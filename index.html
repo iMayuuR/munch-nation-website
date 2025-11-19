@@ -2,7 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Munch Nation">
+    <meta name="theme-color" content="#FF6B35">
+    <meta name="description" content="Munch Nation - Chinese, Lebanese, Sichuan, Shawarma. Order online from Zomato or dine in at Virar, Mumbai.">
+    <meta name="keywords" content="Munch Nation, Restaurant, Virar, Mumbai, Zomato, Delivery, Dine-in">
     <title>Munch Nation - Restaurant Delivery & Dine-In</title>
     <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍽️</text></svg>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -16,7 +22,10 @@
                 <h1>🍽️ Munch Nation</h1>
                 <p class="hindi-name">मंच नेशन</p>
             </div>
-            <nav>
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav id="navMenu" class="nav-menu">
                 <a href="#home">Home</a>
                 <a href="#menu">Menu</a>
                 <a href="#about">About</a>
@@ -243,6 +252,25 @@
     </footer>
 
     <script>
+        // Hamburger Menu Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+        
+        if(menuToggle) {
+            menuToggle.addEventListener('click', function() {
+                navMenu.classList.toggle('active');
+                menuToggle.classList.toggle('active');
+            });
+            
+            // Close menu when link is clicked
+            navMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', function() {
+                    navMenu.classList.remove('active');
+                    menuToggle.classList.remove('active');
+                });
+            });
+        }
+
         // Auto-update copyright year
         document.querySelector('footer p').textContent = `© ${new Date().getFullYear()} Munch Nation. All rights reserved.`;
 
@@ -267,6 +295,42 @@
             });
         });
 
+        // Scroll Animation with Intersection Observer
+        function observeElements() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting) {
+                        entry.target.classList.add('fade-in-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.add('fade-in');
+                observer.observe(section);
+            });
+            
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.classList.add('fade-in');
+                observer.observe(card);
+            });
+            
+            document.querySelectorAll('.menu-tile').forEach(tile => {
+                tile.classList.add('fade-in');
+                observer.observe(tile);
+            });
+            
+            document.querySelectorAll('.about-card').forEach(card => {
+                card.classList.add('fade-in');
+                observer.observe(card);
+            });
+        }
+        
+        observeElements();
+
         // Image loading animation
         const images = document.querySelectorAll('.menu-img');
         images.forEach(img => {
@@ -275,6 +339,7 @@
             });
             img.style.opacity = '0.7';
         });
+    </script>
     </script>
 </body>
 </html>
